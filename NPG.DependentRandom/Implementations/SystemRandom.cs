@@ -12,6 +12,11 @@ namespace NPG.DependentRandom.Implementations
 			_rnd = new Random();
 		}
 		
+		public SystemRandom(int seed)
+		{
+			_rnd = new Random(seed);
+		}
+		
 		public float GetValue()
 		{
 			return (float)_rnd.NextDouble();

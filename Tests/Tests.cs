@@ -13,7 +13,7 @@ namespace Tests
 		public void RollOne([Values(0.1f, 0.35f, 0.5f, 0.9f, 1f)]float chance)
 		{
 			var dependentRandom = DependentRandom.Create();
-			var systemRandom = new SystemRandom();
+			var systemRandom = new SystemRandom(12323542);
 
 			var dependentRandomLongestRow = 0;
 			var systemRandomLongestRow = 0;
