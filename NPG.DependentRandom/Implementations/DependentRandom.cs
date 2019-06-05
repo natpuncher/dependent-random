@@ -3,14 +3,18 @@ using NPG.DependentRandom.Models;
 
 namespace NPG.DependentRandom.Implementations
 {
-	public class DependentRandom : IRandom
+	public class DependentRandom : IDependentRandom
 	{
+		private readonly IRandom _random;
 		private readonly IRollHistorySerializer _rollHistorySerializer;
+		private readonly IDependentChanceProvider _dependentChanceProvider;
 		private readonly RollHistory _rollHistory;
 
-		public DependentRandom(IRollHistorySerializer rollHistorySerializer)
+		public DependentRandom(IRandom random, IRollHistorySerializer rollHistorySerializer, IDependentChanceProvider dependentChanceProvider)
 		{
+			_random = random;
 			_rollHistorySerializer = rollHistorySerializer;
+			_dependentChanceProvider = dependentChanceProvider;
 			_rollHistory = _rollHistorySerializer.Deserialize();
 		}
 

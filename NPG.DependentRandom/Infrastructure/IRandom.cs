@@ -1,10 +1,7 @@
-using System;
-
 namespace NPG.DependentRandom.Infrastructure
 {
-	public interface IRandom : IDisposable
+	public interface IRandom
 	{
-		bool Roll(string key, float chance);
-		int Roll(string key, float[] chances);
+		float GetValue();
 	}
 }

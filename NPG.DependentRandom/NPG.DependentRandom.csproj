@@ -39,6 +39,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementations\DependentRandom.cs" />
+    <Compile Include="Implementations\SystemRandom.cs" />
+    <Compile Include="Infrastructure\IDependentChanceProvider.cs" />
+    <Compile Include="Infrastructure\IDependentRandom.cs" />
     <Compile Include="Infrastructure\IRandom.cs" />
     <Compile Include="Infrastructure\IRollHistorySerializer.cs" />
     <Compile Include="Models\RollHistory.cs" />
