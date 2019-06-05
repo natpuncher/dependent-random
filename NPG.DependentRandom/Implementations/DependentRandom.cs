@@ -26,11 +26,11 @@ namespace NPG.DependentRandom.Implementations
 		}
 
 		/// <summary>
-		/// 
+		/// Rolls an event with giving chance
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="chance"></param>
-		/// <returns></returns>
+		/// <returns>Is event rolled</returns>
 		public bool Roll(string key, float chance)
 		{
 			var dependentChance = ApplyHistoryToChance(key, chance);
@@ -40,11 +40,11 @@ namespace NPG.DependentRandom.Implementations
 		}
 
 		/// <summary>
-		/// 
+		/// Rolls an event with giving chances
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="chances"></param>
-		/// <returns></returns>
+		/// <returns>Id of rolled event</returns>
 		public int Roll(string key, float[] chances)
 		{
 			var dependentChances = ApplyHistoryToChances(key, chances);
