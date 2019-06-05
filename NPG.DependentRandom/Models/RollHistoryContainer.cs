@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NPG.DependentRandom.Models
 {
-	public class RollHistory
+	public class RollHistoryContainer
 	{
 		private readonly Dictionary<string, int[]> _historyStorage = new Dictionary<string, int[]>();
 
@@ -21,9 +21,10 @@ namespace NPG.DependentRandom.Models
 			{
 				history = InitializeHistory(key, length);
 			}
+
 			return history;
 		}
-		
+
 		public void UpdateHistory(string key, int rollId)
 		{
 			int[] history;
@@ -45,7 +46,7 @@ namespace NPG.DependentRandom.Models
 				}
 			}
 		}
-		
+
 		private int[] InitializeHistory(string key, int length, int[] history = null)
 		{
 			var result = new int[length];
@@ -60,7 +61,7 @@ namespace NPG.DependentRandom.Models
 			{
 				return;
 			}
-			
+
 			var length = Math.Min(result.Length, history.Length);
 			for (var i = 0; i < length; i++)
 			{
