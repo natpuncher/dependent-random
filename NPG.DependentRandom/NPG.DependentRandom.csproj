@@ -38,7 +38,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementations\DependentRandom.cs" />
     <Compile Include="Infrastructure\IRandom.cs" />
+    <Compile Include="Infrastructure\IRollHistorySerializer.cs" />
+    <Compile Include="Models\RollHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
