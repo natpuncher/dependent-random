@@ -7,10 +7,10 @@ namespace Tests
 	[TestFixture]
 	public class Tests
 	{
-		private const float Delta = 0.01f;
+		private const float Delta = 0.005f;
 		
 		[Test]
-		public void RollOne([Values(0.1f, 0.35f, 0.5f, 0.9f, 1f)]float chance)
+		public void RollOne([Values(0.1f, 0.35f, 0.5f, 0.6f, 0.8f, 1f)]float chance)
 		{
 			var dependentRandom = DependentRandom.Create();
 			var systemRandom = new SystemRandom(12323542);
@@ -33,8 +33,8 @@ namespace Tests
 			Assert.AreEqual(chance, dependentInfo.GetChance(), Delta);
 			Assert.AreEqual(chance, systemInfo.GetChance(), Delta);
 		
-			Console.WriteLine(string.Format("Dependent max row = {0}", dependentInfo.MaxRow));
-			Console.WriteLine(string.Format("System max row = {0}", systemInfo.MaxRow));
+			Console.WriteLine(string.Format("Dependent random chance = {0}, max row = {1}", dependentInfo.GetChance(), dependentInfo.MaxRow));
+			Console.WriteLine(string.Format("System random chance = {0}, max row = {1}", systemInfo.GetChance(), systemInfo.MaxRow));
 		}
 
 		private class RollInfo
