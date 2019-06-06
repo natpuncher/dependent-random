@@ -5,12 +5,12 @@ namespace NPG.DependentRandom.Models
 {
 	public class RollHistoryContainer
 	{
-		private readonly Dictionary<string, int[]> _historyStorage = new Dictionary<string, int[]>();
+		public Dictionary<string, int[]> HistoryStorage = new Dictionary<string, int[]>();
 
 		public int[] GetHistory(string key, int length)
 		{
 			int[] history;
-			if (_historyStorage.TryGetValue(key, out history))
+			if (HistoryStorage.TryGetValue(key, out history))
 			{
 				if (history.Length != length)
 				{
@@ -28,7 +28,7 @@ namespace NPG.DependentRandom.Models
 		public void UpdateHistory(string key, int rollId)
 		{
 			int[] history;
-			if (!_historyStorage.TryGetValue(key, out history))
+			if (!HistoryStorage.TryGetValue(key, out history))
 			{
 				history = InitializeHistory(key, rollId + 1);
 			}
@@ -51,7 +51,7 @@ namespace NPG.DependentRandom.Models
 		{
 			var result = new int[length];
 			MergeHistory(result, history);
-			_historyStorage[key] = result;
+			HistoryStorage[key] = result;
 			return result;
 		}
 
