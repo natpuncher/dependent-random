@@ -6,7 +6,7 @@ namespace NPG.DependentRandom.Infrastructure
 	public interface IDependentRandom : IDisposable
 	{
 		/// <summary>
-		/// Rolls an event with giving chance
+		/// Rolls an event with the giving chance
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="chance"></param>
@@ -14,12 +14,19 @@ namespace NPG.DependentRandom.Infrastructure
 		bool Roll(string key, float chance);
 		
 		/// <summary>
-		/// Rolls an event with giving chances
+		/// Rolls one of the events with giving chances
 		/// </summary>
 		/// <param name="key"></param>
 		/// <param name="chances"></param>
-		/// <returns>Id of rolled event</returns>
+		/// <returns>The Id of rolled event</returns>
 		int Roll(string key, IEnumerable<float> chances);
+		
+		/// <summary>
+		/// Rolls one of the events with giving chances
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="chances"></param>
+		/// <returns>The Id of rolled event</returns>
 		int Roll(string key, float[] chances);
 	}
 }
