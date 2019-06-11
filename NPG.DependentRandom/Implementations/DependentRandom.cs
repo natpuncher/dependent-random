@@ -13,13 +13,22 @@ namespace NPG.DependentRandom.Implementations
 		private readonly RollHistoryContainer _rollHistoryContainer;
 
 		/// <summary>
-		/// Creates a simple version of DependentRandom class without serialization of roll history
+		/// Creates an instance of IDependentRandom without a serialization of roll history
 		/// </summary>
 		/// <returns></returns>
 		public static IDependentRandom Create()
 		{
-			return new DependentRandom(new SystemRandom(), new RollHistorySerializerMock(),
-				new CachedDependentChanceProvider());
+			return new DependentRandom(new SystemRandom(), new RollHistorySerializerMock(), new CachedDependentChanceProvider());
+		}
+
+		/// <summary>
+		/// Creates an instance of IDependentRandom with a binary serialization into the giving file
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <returns></returns>
+		public static IDependentRandom Create(string filePath)
+		{
+			return new DependentRandom(new SystemRandom(), new BinaryRollHistorySerializer(filePath), new CachedDependentChanceProvider());
 		}
 
 		public DependentRandom(IRandom random, IRollHistorySerializer rollHistorySerializer,
