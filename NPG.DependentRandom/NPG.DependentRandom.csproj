@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementations\BinaryRollHistorySerializer.cs" />
     <Compile Include="Implementations\CachedDependentChanceProvider.cs" />
     <Compile Include="Implementations\DependentRandom.cs" />
     <Compile Include="Implementations\RollHistorySerializerMock.cs" />

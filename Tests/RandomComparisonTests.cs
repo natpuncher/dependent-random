@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Tests
 {
 	[TestFixture]
-	public class Tests
+	public class RandomComparisonTests
 	{
 		private const float Delta = 0.005f;
 		
