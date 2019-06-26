@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPG.DependentRandom", "NPG.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{526EA0C9-26DD-4625-9DB0-97456BC70210}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependentChancesCalculator", "DependentChancesCalculator\DependentChancesCalculator.csproj", "{74002DBF-B4BE-46A0-A1DC-60D498B79BA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{526EA0C9-26DD-4625-9DB0-97456BC70210}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{526EA0C9-26DD-4625-9DB0-97456BC70210}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{526EA0C9-26DD-4625-9DB0-97456BC70210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74002DBF-B4BE-46A0-A1DC-60D498B79BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74002DBF-B4BE-46A0-A1DC-60D498B79BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74002DBF-B4BE-46A0-A1DC-60D498B79BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74002DBF-B4BE-46A0-A1DC-60D498B79BA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

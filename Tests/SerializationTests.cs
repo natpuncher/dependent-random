@@ -2,7 +2,7 @@ using System.IO;
 using NPG.DependentRandom.Implementations;
 using NUnit.Framework;
 
-namespace Tests
+namespace NPG.DependentRandom.Tests
 {
 	[TestFixture]
 	public class SerializationTests
@@ -12,7 +12,7 @@ namespace Tests
 		[Test]
 		public void BinarySerializationTest()
 		{
-			var random = DependentRandom.Create(FileName);
+			var random =NPG.DependentRandom.Implementations.DependentRandom.Create(FileName);
 
 			var eventName = "testEvent";
 			random.Roll(eventName, 0.5f);

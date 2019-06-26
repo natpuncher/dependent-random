@@ -2,7 +2,7 @@
 using NPG.DependentRandom.Implementations;
 using NUnit.Framework;
 
-namespace Tests
+namespace NPG.DependentRandom.Tests
 {
 	[TestFixture]
 	public class RandomComparisonTests
@@ -12,7 +12,7 @@ namespace Tests
 		[Test]
 		public void RollOne([Values(0.1f, 0.35f, 0.5f, 0.6f, 0.8f, 1f)]float chance)
 		{
-			var dependentRandom = DependentRandom.Create();
+			var dependentRandom = NPG.DependentRandom.Implementations.DependentRandom.Create();
 			var systemRandom = new SystemRandom(12323542);
 
 			var dependentRandomLongestRow = 0;
@@ -35,43 +35,6 @@ namespace Tests
 		
 			Console.WriteLine(string.Format("Dependent random chance = {0}, max row = {1}", dependentInfo.GetChance(), dependentInfo.MaxRow));
 			Console.WriteLine(string.Format("System random chance = {0}, max row = {1}", systemInfo.GetChance(), systemInfo.MaxRow));
-		}
-
-		private class RollInfo
-		{
-			public int MaxRow { get; private set; }
-			private int _curRow;
-			private bool _lastValue;
-			private int _count;
-			private int _successCount;
-
-			public void Update(bool curValue)
-			{
-				_count++;
-				if (curValue)
-				{
-					_successCount++;
-				}
-				
-				if (curValue == _lastValue)
-				{
-					_curRow++;
-				}
-				else
-				{
-					_lastValue = curValue;
-					if (_curRow > MaxRow)
-					{
-						MaxRow = _curRow;
-					}
-					_curRow = 0;
-				}
-			}
-
-			public float GetChance()
-			{
-				return 1f * _successCount / _count;
-			}
 		}
 	}
 }
