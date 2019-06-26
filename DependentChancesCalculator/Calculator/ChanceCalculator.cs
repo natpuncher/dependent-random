@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using DependentChancesCalculator.Calculator;
 using NPG.DependentRandom.DependentChancesCalculator.Implementations;
 using NPG.DependentRandom.Implementations;
 using NPG.DependentRandom.Tests;
@@ -10,7 +11,6 @@ namespace NPG.DependentRandom.DependentChancesCalculator.Calculator
 	{
 		private const int IterationCount = 100000;
 		private const float Delta = 0.000000001f;
-		private const float SmallValueBorder = 0.1f;
 
 		private readonly float _sourceChance;
 		private readonly Action<float> _onComplete;
@@ -27,33 +27,39 @@ namespace NPG.DependentRandom.DependentChancesCalculator.Calculator
 		{
 			var chanceProvider = new CalculatorDependentChanceProvider();
 			chanceProvider.DependentChance = _sourceChance;
-
-			var random = new DependentRandom.Implementations.DependentRandom(new SystemRandom(), new RollHistorySerializerMock(), chanceProvider);
+			var historyProvider = new ClearableRollHistoryMock();
+			
+			var random = new DependentRandom.Implementations.DependentRandom(new SystemRandom(), historyProvider, chanceProvider);
 			var eventName = "calculations";
 
-			RollInfo rollInfo;
+			var upper = _sourceChance;
+			var lower = 0f;
+
+			var sumChance = 1f;
+			float lastChance;
 			do
 			{
-				rollInfo = new RollInfo();
+				chanceProvider.DependentChance = (upper + lower) / 2;
+				var rollInfo = new RollInfo();
+				historyProvider.Clear();
 				for (var i = 0; i < IterationCount; i++)
 				{
 					rollInfo.Update(random.Roll(eventName, _sourceChance));
 				}
-
-				chanceProvider.DependentChance = UpdateDependentChance(chanceProvider.DependentChance, rollInfo.GetChance());
-			} while (Math.Abs(rollInfo.GetChance() - _sourceChance) > Delta);
+				
+				lastChance = sumChance;
+				sumChance = rollInfo.GetChance();
+				if (sumChance > _sourceChance)
+				{
+					upper = chanceProvider.DependentChance;
+				}
+				else
+				{
+					lower = chanceProvider.DependentChance;
+				}
+			} while (Math.Abs(lastChance - sumChance) > Delta);
 
 			_onComplete(chanceProvider.DependentChance);
-		}
-
-		private float UpdateDependentChance(float dependentChance, float sumChance)
-		{
-			var delta = (_sourceChance - sumChance) / 2;
-			if (dependentChance < SmallValueBorder)
-			{
-				delta /= 10;
-			}
-			return dependentChance + delta;
 		}
 	}
 }

@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Calculator\CalculatorDependentChanceProvider.cs" />
     <Compile Include="Calculator\ChanceCalculator.cs" />
+    <Compile Include="Calculator\ClearableRollHistoryMock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
