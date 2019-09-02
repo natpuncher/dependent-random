@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -17,9 +18,20 @@ namespace NPG.DependentRandom.Implementations
 		
 		public void Serialize(RollHistoryContainer rollHistoryContainer)
 		{
+			if (string.IsNullOrEmpty(_filePath))
+			{
+				throw new ArgumentNullException(nameof(_filePath));
+			}
+			
 			if (File.Exists(_filePath))
 			{
 				File.Delete(_filePath);
+			}
+
+			var directory = Path.GetDirectoryName(_filePath);
+			if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+			{
+				Directory.CreateDirectory(directory);
 			}
 			
 			Serialize(rollHistoryContainer.HistoryStorage, File.Open(_filePath, FileMode.Create));
@@ -27,6 +39,11 @@ namespace NPG.DependentRandom.Implementations
 
 		public RollHistoryContainer Deserialize()
 		{
+			if (string.IsNullOrEmpty(_filePath))
+			{
+				throw new ArgumentNullException(nameof(_filePath));
+			}
+			
 			var result = new RollHistoryContainer();
 			if (File.Exists(_filePath))
 			{
