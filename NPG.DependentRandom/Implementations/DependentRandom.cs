@@ -66,6 +66,11 @@ namespace NPG.DependentRandom.Implementations
 			return Roll(key, chances.ToArray());
 		}
 
+		public void ClearHistory()
+		{
+			_rollHistoryContainer.HistoryStorage.Clear();
+		}
+
 		/// <summary>
 		/// Serializes roll history
 		/// </summary>
