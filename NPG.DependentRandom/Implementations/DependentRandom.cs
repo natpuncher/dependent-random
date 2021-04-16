@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using NPG.DependentRandom.Infrastructure;
 using NPG.DependentRandom.Models;
 
@@ -11,6 +10,7 @@ namespace NPG.DependentRandom.Implementations
 		private readonly IRollHistorySerializer _rollHistorySerializer;
 		private readonly IDependentChanceProvider _dependentChanceProvider;
 		private readonly RollHistoryContainer _rollHistoryContainer;
+		private readonly List<float> _chancesBuffer = new List<float>();
 
 		/// <summary>
 		/// Creates an instance of IDependentRandom without a serialization of roll history
@@ -42,30 +42,29 @@ namespace NPG.DependentRandom.Implementations
 
 		public bool Roll(string key, float chance)
 		{
-			var dependentChance = ApplyHistoryToChance(key, chance);
-			var rollId = GetRollId(new[] {dependentChance});
+			_chancesBuffer.Clear();
+			_chancesBuffer.Add(chance);
+			ApplyHistoryToSingleChance(key);
+			var rollId = GetRollId();
 			_rollHistoryContainer.UpdateHistory(key, rollId);
 			return rollId == 0;
 		}
 
-		public int Roll(string key, float[] chances)
+		public int Roll(string key, IEnumerable<float> chances)
 		{
-			var dependentChances = ApplyHistoryToChances(key, chances);
-			var rollId = GetRollId(dependentChances);
+			_chancesBuffer.Clear();
+			_chancesBuffer.AddRange(chances);
+			ApplyHistoryToChances(key);
+			var rollId = GetRollId();
 			if (rollId == -1)
 			{
-				rollId = chances.Length - 1;
+				rollId = _chancesBuffer.Count - 1;
 			}
 
 			_rollHistoryContainer.UpdateHistory(key, rollId);
 			return rollId;
 		}
-
-		public int Roll(string key, IEnumerable<float> chances)
-		{
-			return Roll(key, chances.ToArray());
-		}
-
+		
 		public void ClearHistory()
 		{
 			_rollHistoryContainer.HistoryStorage.Clear();
@@ -79,15 +78,15 @@ namespace NPG.DependentRandom.Implementations
 			_rollHistorySerializer.Serialize(_rollHistoryContainer);
 		}
 
-		private int GetRollId(float[] chances)
+		private int GetRollId()
 		{
 			var result = -1;
 			float sumValue = 0;
-			var chancesLength = chances.Length;
+			var chancesLength = _chancesBuffer.Count;
 			var rnd = _random.GetValue();
 			for (var i = 0; i < chancesLength; ++i)
 			{
-				var chance = chances[i];
+				var chance = _chancesBuffer[i];
 				if (rnd <= chance + sumValue)
 				{
 					result = i;
@@ -100,49 +99,48 @@ namespace NPG.DependentRandom.Implementations
 			return result;
 		}
 
-		private float[] ApplyHistoryToChances(string key, float[] chances)
+		private void ApplyHistoryToChances(string key)
 		{
-			var chancesLength = chances.Length;
+			var chancesLength = _chancesBuffer.Count;
 			var rollHistory = _rollHistoryContainer.GetHistory(key, chancesLength);
-			chances = GetDependentChances(NormalizeChances(chances));
+			NormalizeBuffer();
+			ApplyDependencyToBuffer();
 			for (var i = 0; i < chancesLength; ++i)
 			{
-				chances[i] = chances[i] * (rollHistory[i] + 1);
+				_chancesBuffer[i] = _chancesBuffer[i] * (rollHistory[i] + 1);
 			}
 
-			return NormalizeChances(chances);
+			NormalizeBuffer();
 		}
 
-		private float ApplyHistoryToChance(string key, float sourceChance)
+		private void ApplyHistoryToSingleChance(string key)
 		{
 			var rollHistory = _rollHistoryContainer.GetHistory(key, 1);
-			var dependentChance = _dependentChanceProvider.GetDependentChance(sourceChance);
-			return dependentChance * (rollHistory[0] + 1);
+			var dependentChance = _dependentChanceProvider.GetDependentChance(_chancesBuffer[0]);
+			_chancesBuffer[0] = dependentChance * (rollHistory[0] + 1);
 		}
 
-		private float[] NormalizeChances(float[] chances)
+		private void NormalizeBuffer()
 		{
-			var sumChance = GetSumChance(chances);
-			var chancesLength = chances.Length;
+			var sumChance = GetSumChance();
+			var chancesLength = _chancesBuffer.Count;
 			for (var i = 0; i < chancesLength; ++i)
 			{
-				chances[i] = chances[i] / sumChance;
+				_chancesBuffer[i] = _chancesBuffer[i] / sumChance;
 			}
-
-			return chances;
 		}
 
-		private float GetSumChance(float[] delta, int[] rollHistory = null)
+		private float GetSumChance(int[] rollHistory = null)
 		{
 			var result = 0f;
 			var hasHistory = rollHistory != null;
-			var deltaLength = delta.Length;
+			var deltaLength = _chancesBuffer.Count;
 			for (var i = 0; i < deltaLength; ++i)
 			{
-				var chance = delta[i];
+				var chance = _chancesBuffer[i];
 				if (hasHistory)
 				{
-					chance *= (rollHistory[i] + 1);
+					chance *= rollHistory[i] + 1;
 				}
 
 				result += chance;
@@ -151,15 +149,13 @@ namespace NPG.DependentRandom.Implementations
 			return result;
 		}
 
-		private float[] GetDependentChances(float[] chances)
+		private void ApplyDependencyToBuffer()
 		{
-			var chancesLength = chances.Length;
+			var chancesLength = _chancesBuffer.Count;
 			for (var i = 0; i < chancesLength; ++i)
 			{
-				chances[i] = _dependentChanceProvider.GetDependentChance(chances[i]);
+				_chancesBuffer[i] = _dependentChanceProvider.GetDependentChance(_chancesBuffer[i]);
 			}
-
-			return chances;
 		}
 	}
 }

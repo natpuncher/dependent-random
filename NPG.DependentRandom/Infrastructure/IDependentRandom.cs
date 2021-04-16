@@ -20,14 +20,6 @@ namespace NPG.DependentRandom.Infrastructure
 		/// <param name="chances"></param>
 		/// <returns>The Id of rolled event</returns>
 		int Roll(string key, IEnumerable<float> chances);
-		
-		/// <summary>
-		/// Rolls one of the events with giving chances
-		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="chances"></param>
-		/// <returns>The Id of rolled event</returns>
-		int Roll(string key, float[] chances);
 
 		/// <summary>
 		/// Clears the roll history
