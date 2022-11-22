@@ -25,5 +25,16 @@ namespace NPG.DependentRandom.Infrastructure
 		/// Clears the roll history
 		/// </summary>
 		void ClearHistory();
+
+		
+		/// <summary>
+		/// Manually deserialize roll history
+		/// </summary>
+		void Deserialize();
+
+		/// <summary>
+		/// Manually serialize roll history
+		/// </summary>
+		void Serialize();
 	}
 }

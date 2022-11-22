@@ -9,7 +9,7 @@ namespace NPG.DependentRandom.Implementations
 		private readonly IRandom _random;
 		private readonly IRollHistorySerializer _rollHistorySerializer;
 		private readonly IDependentChanceProvider _dependentChanceProvider;
-		private readonly RollHistoryContainer _rollHistoryContainer;
+		private RollHistoryContainer _rollHistoryContainer;
 		private readonly List<float> _chancesBuffer = new List<float>();
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace NPG.DependentRandom.Implementations
 			_random = random;
 			_rollHistorySerializer = rollHistorySerializer;
 			_dependentChanceProvider = dependentChanceProvider;
-			_rollHistoryContainer = _rollHistorySerializer.Deserialize();
+			Deserialize();
 		}
 
 		public bool Roll(string key, float chance)
@@ -64,10 +64,20 @@ namespace NPG.DependentRandom.Implementations
 			_rollHistoryContainer.UpdateHistory(key, rollId);
 			return rollId;
 		}
-		
+
 		public void ClearHistory()
 		{
 			_rollHistoryContainer.HistoryStorage.Clear();
+		}
+
+		public void Deserialize()
+		{
+			_rollHistoryContainer = _rollHistorySerializer.Deserialize();
+		}
+
+		public void Serialize()
+		{
+			_rollHistorySerializer.Serialize(_rollHistoryContainer);
 		}
 
 		/// <summary>
@@ -75,7 +85,7 @@ namespace NPG.DependentRandom.Implementations
 		/// </summary>
 		public void Dispose()
 		{
-			_rollHistorySerializer.Serialize(_rollHistoryContainer);
+			Serialize();
 		}
 
 		private int GetRollId()
